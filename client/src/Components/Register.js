@@ -1,38 +1,81 @@
+import loginImage from "../Images/loginImage.jpg";
+import { userSchemaValidation } from "../Validations/UserValidations";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import {
+  Button,
+  Col,
+  Label,
+  Container,
+  Row,
   FormGroup,
-  FormText,
-  FormFeedback,
   Input,
   Form,
-  Label,
 } from "reactstrap";
+import logo from "../Images/logo-t.png";
+
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(userSchemaValidation) });
+
+  // Handle form submission
+
+  const onSubmit = (data) => {
+    console.log("Form Data", data); // You can handle the form submission here
+  };
+
   return (
-    <Form>
-      <FormGroup>
-        <Label for="Name">Name</Label>
-        <Input />
-        <FormFeedback>You will not be able to see this</FormFeedback>
-        <FormText>Enter Your Name..</FormText>
-      </FormGroup>
-      <FormGroup>
-        <Label for="Email">Email</Label>
-        <Input valid />
-        <FormFeedback valid>Sweet! that Email is available</FormFeedback>
-      </FormGroup>
-      <FormGroup>
-        <Label for="Password">password</Label>
-        <Input />
-        <FormFeedback>Enter your password</FormFeedback>
-      </FormGroup>
-      <FormGroup>
-        <Label for="password"></Label>
-        <Input />
-        <FormFeedback tooltip>You will not be able to see this</FormFeedback>
-        <FormText>conform your password</FormText>
-      </FormGroup>
-      <button>Register</button>
-    </Form>
+    <Container>
+      <h1>Register</h1>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row>
+          <Col md={6}>
+            Name<br></br>
+            <input type="text" name="name" {...register("name")}></input>
+          </Col>
+          <p className="error">{errors.name?.message}</p>
+        </Row>
+        <Row>
+          <Col md={6}>
+            Email<br></br>
+            <input type="email" name="email" {...register("email")}></input>
+          </Col>
+          <p className="error">{errors.email?.message}</p>
+        </Row>
+        <Row>
+          <Col md={6}>
+            Password<br></br>
+            <input
+              type="password"
+              name="password"
+              {...register("password")}
+            ></input>
+          </Col>
+          <p className="error">{errors.password?.message}</p>
+        </Row>
+        <Row>
+          <Col md={6}>
+            Confirm Password<br></br>
+            <input
+              type="password"
+              name="confirmpassword"
+              {...register("confirmPassword")}
+            ></input>
+          </Col>
+          <p className="error">{errors.confirmPassword?.message}</p>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <Button>Register</Button>
+          </Col>
+        </Row>
+      </Form>
+    </Container>
   );
 };
 

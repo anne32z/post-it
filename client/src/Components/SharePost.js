@@ -7,6 +7,7 @@ import {
   FormGroup,
   Input,
 } from "reactstrap";
+
 const SharePosts = () => {
   return (
     <div>
@@ -16,9 +17,9 @@ const SharePosts = () => {
           <Input
             id="share"
             name="share"
-            placeholder="share your toughts..."
+            placeholder="Share your thoughts..."
             type="textarea"
-          />
+          ></Input>
           <Button>PostIT</Button>
         </Col>
       </Row>

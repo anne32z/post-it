@@ -16,7 +16,7 @@ const Home = () => {
         </Col>
       </Row>
       <Row>
-        <Col md={3} />
+        <Col md={3}></Col>
         <Col md={9}>
           <Posts />
         </Col>
