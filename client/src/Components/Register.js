@@ -3,7 +3,9 @@ import { userSchemaValidation } from "../Validations/UserValidations";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSelector } from "react-redux"; // we use to access the redux state and extract data from the store
+import { useSelector, useDispatch } from "react-redux"; // we use to access the redux state and extract data from the store
+import { useState } from "react";
+import { addUser } from "../Features/UserSlice";
 
 import {
   Button,
@@ -25,9 +27,23 @@ const Register = () => {
   } = useForm({ resolver: yupResolver(userSchemaValidation) }); // Handle form submission
 
   const userList = useSelector((state) => state.users.value); // this is to get the data that we initiate in the slice and it can be written anywhere as long as it is before the return statement
-
+  const [name, setname] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const [confirmPassword, setconfirmPassword] = useState("");
+  const dispatch = useDispatch();
   const onSubmit = (data) => {
-    console.log("Form Data", data); // You can handle the form submission here
+    try {
+      const usersData = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      };
+      dispatch(addUser(usersData));
+      alert("user added.");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -37,14 +53,33 @@ const Register = () => {
         <Row>
           <Col md={6}>
             Name<br></br>
-            <input type="text" name="name" {...register("name")}></input>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              placeholder="Enter your name... 
+                " //register this input to the react-hook
+              {...register("name", {
+                onChange: (e) => setname(e.target.value),
+              })}
+            />
+            {name}
           </Col>
           <p className="error">{errors.name?.message}</p>
         </Row>
         <Row>
           <Col md={6}>
             Email<br></br>
-            <input type="email" name="email" {...register("email")}></input>
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              id="email"
+              {...register("email", {
+                onChange: (e) => setemail(e.target.value),
+              })}
+            />
+            {email}
           </Col>
           <p className="error">{errors.email?.message}</p>
         </Row>
@@ -52,10 +87,15 @@ const Register = () => {
           <Col md={6}>
             Password<br></br>
             <input
+              className="form-control"
+              id="password"
               type="password"
               name="password"
-              {...register("password")}
-            ></input>
+              {...register("password", {
+                onChange: (e) => setpassword(e.target.value),
+              })}
+            />
+            {password}
           </Col>
           <p className="error">{errors.password?.message}</p>
         </Row>
@@ -63,10 +103,15 @@ const Register = () => {
           <Col md={6}>
             Confirm Password<br></br>
             <input
+              className="form-control"
+              id="confirmpassword"
               type="password"
               name="confirmpassword"
-              {...register("confirmPassword")}
-            ></input>
+              {...register("confirmPassword", {
+                onChange: (e) => setconfirmPassword(e.target.value),
+              })}
+            />
+            {confirmPassword}
           </Col>
           <p className="error">{errors.confirmPassword?.message}</p>
         </Row>
@@ -86,6 +131,12 @@ const Register = () => {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.password}</td>
+                  <td>
+                    <button className="btn btn-danger">Delete</button>
+                  </td>
+                  <td>
+                    <button className="btn btn-primary">Update</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
